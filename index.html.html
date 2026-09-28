@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f8c9dc" />
+  <title>Rainbow-Colored Clouds on Mars ♡</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
+
+    * { box-sizing: border-box; }
+    :root {
+      --ink: #503c4c;
+      --muted: #806d7b;
+      --cream: #fff8f5;
+      --rose: #e99ab7;
+      --sky1: #f8cad9;
+      --sky2: #e8c6dd;
+      --mars1: #c87e71;
+      --mars2: #8f554f;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, var(--sky1), var(--sky2) 54%, #d99c98 54%, var(--mars2));
+      overflow-x: hidden;
+      transition: background 900ms ease;
+    }
+
+    .stars, .stars::before, .stars::after {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      content: "";
+      background-image:
+        radial-gradient(circle at 12% 14%, #fff 0 1px, transparent 1.8px),
+        radial-gradient(circle at 31% 9%, #fff8 0 1px, transparent 1.6px),
+        radial-gradient(circle at 76% 18%, #fff 0 1px, transparent 1.7px),
+        radial-gradient(circle at 89% 8%, #fff9 0 1px, transparent 1.7px),
+        radial-gradient(circle at 60% 30%, #fff7 0 1px, transparent 1.5px);
+      background-size: 330px 240px;
+      opacity: .75;
+    }
+
+    .planet {
+      position: fixed;
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      right: 7vw;
+      top: 7vh;
+      background:
+        radial-gradient(circle at 35% 30%, #fff8 0 5%, transparent 6%),
+        radial-gradient(circle at 65% 58%, #ba7067 0 8%, transparent 9%),
+        linear-gradient(135deg,#f0aa99,#c76e68);
+      box-shadow: inset -18px -12px 30px #8d4c5466, 0 0 35px #fff5;
+      opacity: .78;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      width: min(920px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 46px 0 150px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 13px;
+      border: 1px solid #ffffff88;
+      background: #ffffff42;
+      backdrop-filter: blur(8px);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(38px, 8vw, 72px);
+      line-height: .98;
+      margin: 20px auto 12px;
+      max-width: 760px;
+      color: #fff9fb;
+      text-shadow: 0 3px 22px #7d52675c;
+    }
+
+    .subtitle {
+      max-width: 590px;
+      margin: 0 auto 30px;
+      color: #624f5d;
+      font-size: clamp(14px, 2.6vw, 17px);
+      line-height: 1.65;
+    }
+
+    .card {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px;
+      border: 1px solid #ffffff99;
+      border-radius: 30px;
+      background: #fffaf7c9;
+      box-shadow: 0 25px 70px #704f5d35;
+      backdrop-filter: blur(14px);
+    }
+
+    .question {
+      margin: 0 0 6px;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(23px, 5vw, 34px);
+    }
+
+    .hint { margin: 0 0 20px; color: var(--muted); font-size: 13px; }
+
+    .moods {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .mood {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      padding: 8px 3px;
+      border-radius: 18px;
+      color: var(--ink);
+      transition: transform .2s ease, background .2s ease;
+      font: inherit;
+    }
+
+    .mood:hover, .mood:focus-visible {
+      transform: translateY(-5px);
+      background: #fff9;
+      outline: none;
+    }
+
+    .cloud {
+      position: relative;
+      display: block;
+      width: 64px;
+      height: 28px;
+      margin: 18px auto 12px;
+      border-radius: 999px;
+      background: var(--c);
+      box-shadow: 0 7px 16px #77566522;
+      filter: saturate(.88);
+    }
+
+    .cloud::before, .cloud::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: inherit;
+    }
+    .cloud::before { width: 34px; height: 34px; left: 10px; top: -17px; }
+    .cloud::after { width: 27px; height: 27px; right: 8px; top: -11px; }
+
+    .rainbow {
+      background: linear-gradient(90deg,#f3a7b8,#f5c77c,#b6dba9,#9bcbdc,#b7a6dd,#eda8c9);
+    }
+
+    .mood span:last-child { display: block; font-size: 11px; font-weight: 700; }
+
+    .result {
+      display: none;
+      margin-top: 22px;
+      padding: 23px 20px;
+      border-radius: 23px;
+      background: #fff;
+      text-align: left;
+      box-shadow: inset 0 0 0 1px #eadde3;
+      animation: appear .45s ease both;
+    }
+
+    .result.show { display: block; }
+    .result-top { display: flex; align-items: center; gap: 13px; }
+    .dot { width: 15px; height: 15px; border-radius: 50%; flex: 0 0 auto; }
+    .result h2 { margin: 0; font-family: "Playfair Display", serif; font-size: 25px; }
+    .meaning { margin: 10px 0 14px; color: #6e5d69; line-height: 1.6; font-size: 14px; }
+    .love-note {
+      margin: 0;
+      padding: 15px 17px;
+      border-radius: 17px;
+      background: #fff4f7;
+      color: #745260;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .tiny { margin: 18px 0 0; font-size: 11px; color: #8a7481; }
+
+    .checkin { display:none; margin-top:20px; text-align:left; border-top:1px solid #eadde3; padding-top:20px; }
+    .checkin.show { display:block; animation:appear .35s ease both; }
+    .field { margin-top:14px; }
+    .field label { display:block; font-size:12px; font-weight:700; margin-bottom:7px; color:#6e5d69; }
+    .field textarea, .field select { width:100%; border:1px solid #e4d3dc; background:#fffdfd; color:var(--ink); border-radius:14px; padding:12px 13px; font:inherit; font-size:16px; outline:none; }
+    .field textarea { min-height:92px; resize:vertical; }
+    .field textarea:focus, .field select:focus { border-color:#d98eaa; box-shadow:0 0 0 3px #e99ab722; }
+    .range-row { display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; }
+    .range-row input { width:100%; accent-color:var(--rose); }
+    .range-value { min-width:38px; text-align:center; font-weight:700; background:#fff4f7; padding:6px 9px; border-radius:10px; }
+    .submit-btn { width:100%; margin-top:16px; border:0; border-radius:15px; padding:13px 16px; background:#d983a5; color:white; font:inherit; font-weight:700; cursor:pointer; min-height:48px; }
+    .submit-btn:disabled { opacity:.55; cursor:not-allowed; }
+    .status { display:none; margin-top:12px; padding:11px 13px; border-radius:12px; font-size:13px; line-height:1.45; }
+    .status.show { display:block; }
+    .status.ok { background:#edf8f0; color:#486b50; }
+    .status.err { background:#fff0f2; color:#8b4f5b; }
+    .privacy { margin:10px 0 0; color:#8a7481; font-size:11px; text-align:center; }
+    .selected-mood { background:#fff9; transform:translateY(-4px); box-shadow:inset 0 0 0 2px #ffffffaa; }
+
+
+    .mars {
+      position: fixed;
+      z-index: 1;
+      left: -5vw;
+      right: -5vw;
+      bottom: -75px;
+      height: 210px;
+      border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+      background:
+        radial-gradient(ellipse at 22% 32%, #87544d 0 3%, transparent 3.4%),
+        radial-gradient(ellipse at 72% 38%, #a8675d 0 5%, transparent 5.4%),
+        radial-gradient(ellipse at 51% 65%, #754942 0 4%, transparent 4.4%),
+        linear-gradient(#c67e70,#8d554e);
+      box-shadow: inset 0 20px 45px #e5a28b55;
+    }
+
+    .floating {
+      position: fixed;
+      z-index: 1;
+      opacity: .34;
+      animation: drift 16s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .f1 { top: 27%; left: 5%; transform: scale(1.3); }
+    .f2 { top: 39%; right: 7%; transform: scale(.85); animation-delay: -7s; }
+    .f3 { top: 12%; left: 18%; transform: scale(.6); animation-delay: -3s; }
+
+    @keyframes drift { to { translate: 45px 10px; } }
+    @keyframes appear { from { opacity: 0; transform: translateY(8px); } }
+
+    @media (max-width: 700px) {
+      main { padding-top: 30px; }
+      .card { padding: 20px 13px; border-radius: 25px; }
+      .moods { grid-template-columns: repeat(4, 1fr); }
+      .mood:last-child { grid-column: 2 / span 2; }
+      .planet { width: 66px; height: 66px; opacity: .45; }
+      .cloud { transform: scale(.85); margin-top: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="planet"></div>
+
+  <div class="floating f1"><span class="cloud" style="--c:#f5aec5"></span></div>
+  <div class="floating f2"><span class="cloud rainbow"></span></div>
+  <div class="floating f3"><span class="cloud" style="--c:#b9a9df"></span></div>
+
+  <main>
+    <div class="eyebrow">🌷 A tiny universe made for you</div>
+    <h1>Hello, My Pretty Cain ♡</h1>
+    <p class="subtitle">
+      Even on Mars, the clouds would change colors depending on how you feel.
+      There is no wrong color here — just tell me what your sky looks like today.
+    </p>
+
+    <section class="card">
+      <h2 class="question">What color are your clouds today?</h2>
+      <p class="hint">Tap the cloud that feels closest to your heart.</p>
+
+      <div class="moods" id="moods"></div>
+
+      <div class="result" id="result" aria-live="polite">
+        <div class="result-top">
+          <div class="dot" id="dot"></div>
+          <h2 id="resultTitle"></h2>
+        </div>
+        <p class="meaning" id="meaning"></p>
+        <p class="love-note" id="note"></p>
+      </div>
+
+      <form class="checkin" id="checkinForm">
+        <div class="field">
+          <label for="intensity">How strong is this feeling?</label>
+          <div class="range-row">
+            <input id="intensity" name="intensity" type="range" min="1" max="10" value="5" />
+            <output class="range-value" id="intensityValue" for="intensity">5/10</output>
+          </div>
+        </div>
+        <div class="field">
+          <label for="message">Want to tell me more? ♡</label>
+          <textarea id="message" name="message" maxlength="800" placeholder="You can write anything here..."></textarea>
+        </div>
+        <div class="field">
+          <label for="need">What would help right now?</label>
+          <select id="need" name="need">
+            <option value="Just listen">Just listen</option>
+            <option value="Comfort me">Comfort me</option>
+            <option value="Give me space">Give me space</option>
+            <option value="Spend time with me">Spend time with me</option>
+            <option value="Distract me">Distract me</option>
+            <option value="Celebrate with me">Celebrate with me</option>
+          </select>
+        </div>
+        <button class="submit-btn" id="submitBtn" type="submit">Send my little cloud ☁️♡</button>
+        <div class="status" id="saveStatus" role="status" aria-live="polite"></div>
+        <p class="privacy">Your response is saved privately. ♡</p>
+      </form>
+
+      <p class="tiny">Your feelings don't have to make perfect sense to be real. ☁️♡</p>
+    </section>
+  </main>
+
+  <div class="mars"></div>
+
+<script>
+// Supabase REST configuration. Replace these two values before deployment.
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_PUBLISHABLE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+let selectedMood = null;
+
+const moods = [
+  {
+    name: "Pink", label: "Loved & Soft", color: "#f4a9c1",
+    sky: ["#f8c5d7","#e8bfd9"],
+    meaning: "Your heart feels soft today — affectionate, warm, or simply wanting a little extra love.",
+    note: "My pretty Cain, stay in this soft little cloud as long as you want. You deserve gentle days, sweet words, and all my love. ♡"
+  },
+  {
+    name: "Yellow", label: "Happy", color: "#f4cd76",
+    sky: ["#f7d9a2","#efbdad"],
+    meaning: "Your sky feels bright. Something is making your heart lighter, playful, hopeful, or happy.",
+    note: "Seeing your yellow cloud makes my little Mars brighter too. Keep that smile with you, baby — I hope today gives you even more reasons for it. ☀️"
+  },
+  {
+    name: "Blue", label: "Sad", color: "#8ebbd6",
+    sky: ["#9fbcd1","#b8a9c4"],
+    meaning: "Your clouds feel a little heavy. Maybe you're sad, tired, lonely, or you just need space to feel things.",
+    note: "You don't have to turn your cloud pink for me. If today is blue, I'll sit under the blue sky with you. You can tell me everything, a little, or nothing at all. ♡"
+  },
+  {
+    name: "Purple", label: "Overwhelmed", color: "#b4a0d8",
+    sky: ["#b5a6cb","#d1a9c2"],
+    meaning: "There may be too many thoughts floating around at once. Your heart and mind might need some quiet.",
+    note: "One thing at a time, my love. You don't have to carry the whole universe today. Let me be one of the places where you can rest. ☁️"
+  },
+  {
+    name: "Red", label: "Upset", color: "#e68f91",
+    sky: ["#dc9b9e","#b98294"],
+    meaning: "Something may have hurt, frustrated, annoyed, or disappointed you. This cloud is allowed to exist too.",
+    note: "Your feelings matter even when they're stormy. I won't ask you to pretend you're okay. Tell me what happened when you're ready, and I'll listen. ♡"
+  },
+  {
+    name: "Green", label: "Calm", color: "#a9cfb1",
+    sky: ["#b9d7c6","#c8c9d2"],
+    meaning: "Your sky feels peaceful — grounded, safe, content, or simply okay with where you are right now.",
+    note: "I love this quiet little green sky for you. No rush, no pressure — just breathe and enjoy your peaceful orbit today. 🌿"
+  },
+  {
+    name: "Rainbow", label: "Mixed Feelings", color: "linear-gradient(90deg,#f3a7b8,#f5c77c,#b6dba9,#9bcbdc,#b7a6dd)",
+    rainbow: true,
+    sky: ["#efb8ca","#bbaed5"],
+    meaning: "A little bit of everything is happening inside you. Happy and sad, calm and worried — feelings can exist together.",
+    note: "You never have to choose just one feeling for me to understand you. However many colors are in your sky, I still want to know your whole little universe. 🌈♡"
+  }
+];
+
+const wrap = document.getElementById("moods");
+const result = document.getElementById("result");
+
+moods.forEach((m, i) => {
+  const button = document.createElement("button");
+  button.className = "mood";
+  button.setAttribute("aria-label", `${m.name}: ${m.label}`);
+  button.innerHTML = `
+    <span class="cloud ${m.rainbow ? "rainbow" : ""}" style="${m.rainbow ? "" : `--c:${m.color}`}"></span>
+    <span>${m.name}</span>
+  `;
+  button.addEventListener("click", () => chooseMood(m, button));
+  wrap.appendChild(button);
+});
+
+function chooseMood(m, button) {
+  selectedMood = m;
+  document.querySelectorAll(".mood").forEach(el => el.classList.remove("selected-mood"));
+  if (button) button.classList.add("selected-mood");
+  document.documentElement.style.setProperty("--sky1", m.sky[0]);
+  document.documentElement.style.setProperty("--sky2", m.sky[1]);
+  document.getElementById("resultTitle").textContent = `${m.name} Clouds — ${m.label}`;
+  document.getElementById("meaning").textContent = m.meaning;
+  document.getElementById("note").textContent = m.note;
+  const dot = document.getElementById("dot");
+  dot.style.background = m.color;
+  result.classList.remove("show");
+  void result.offsetWidth;
+  result.classList.add("show");
+  document.getElementById("checkinForm").classList.add("show");
+  if (window.innerWidth < 700) {
+    setTimeout(() => result.scrollIntoView({behavior:"smooth", block:"nearest"}), 120);
+  }
+}
+
+const intensity = document.getElementById("intensity");
+const intensityValue = document.getElementById("intensityValue");
+const form = document.getElementById("checkinForm");
+const submitBtn = document.getElementById("submitBtn");
+const saveStatus = document.getElementById("saveStatus");
+
+intensity.addEventListener("input", () => { intensityValue.value = `${intensity.value}/10`; });
+
+function showStatus(message, ok) {
+  saveStatus.textContent = message;
+  saveStatus.className = `status show ${ok ? "ok" : "err"}`;
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!selectedMood) return showStatus("Please choose a cloud first. ♡", false);
+  if (SUPABASE_URL.startsWith("YOUR_") || SUPABASE_PUBLISHABLE_KEY.startsWith("YOUR_")) {
+    return showStatus("Almost ready — add your Supabase URL and publishable key in this file first.", false);
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Sending your cloud…";
+  saveStatus.className = "status";
+
+  const payload = {
+    mood: selectedMood.name,
+    mood_label: selectedMood.label,
+    intensity: Number(intensity.value),
+    message: document.getElementById("message").value.trim() || null,
+    need: document.getElementById("need").value,
+    source: "mood-check-web"
+  };
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/mood_responses`, {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_PUBLISHABLE_KEY,
+        "Authorization": `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) throw new Error(`Save failed (${response.status})`);
+    showStatus("Your response is saved privately. ♡", true);
+    form.reset();
+    intensityValue.value = "5/10";
+  } catch (error) {
+    console.error(error);
+    showStatus("I couldn't save your cloud yet. Please try again in a moment. ♡", false);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Send my little cloud ☁️♡";
+  }
+});
+</script>
+</body>
+</html>
